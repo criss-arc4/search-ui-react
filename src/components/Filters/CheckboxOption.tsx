@@ -44,6 +44,7 @@ export interface CheckboxOptionProps extends FilterOptionConfig {
  */
 export interface CheckboxCssClasses {
   input?: string,
+  inputRadio?: string,
   input___disabled?: string,
   label?: string,
   label___disabled?: string,
@@ -57,6 +58,7 @@ const builtInCssClasses: Readonly<CheckboxCssClasses> = {
   label: 'text-neutral text-sm font-normal cursor-pointer',
   label___disabled: 'opacity-50 cursor-not-allowed',
   input: 'w-3.5 h-3.5 form-checkbox cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary',
+  inputRadio: 'w-3.5 h-3.5 form-radio cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary',
   input___disabled: 'border-gray-200 bg-gray-50 cursor-not-allowed',
   container: 'flex items-center',
   optionContainer: 'flex items-center space-x-3 peer',
@@ -132,6 +134,9 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
   const inputClasses = classNames(cssClasses.input, {
     [cssClasses.input___disabled ?? '']: isOptionsDisabled
   });
+  const inputRadioClasses = classNames(cssClasses.inputRadio, {
+    [cssClasses.input___disabled ?? '']: isOptionsDisabled
+  });
   const labelClasses = classNames(cssClasses.label, {
     [cssClasses.label___disabled ?? '']: isOptionsDisabled
   });
@@ -145,7 +150,7 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
             name={fieldId}
             id={optionId}
             checked={isSelected}
-            className={inputClasses}
+            className={inputRadioClasses}
             onChange={handleChange}
             disabled={isOptionsDisabled}
           />
