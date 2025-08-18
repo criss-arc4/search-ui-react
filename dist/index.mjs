@@ -5666,7 +5666,7 @@ function isUniversalSearchResults(data) {
 
 // src/components/Filters/CheckboxOption.tsx
 import { useTranslation as useTranslation16 } from "react-i18next";
-import { Matcher as Matcher5 } from "@yext/search-headless-react";
+import { Matcher as Matcher5, useSearchActions as useSearchActions12 } from "@yext/search-headless-react";
 import React43, { useCallback as useCallback17, useEffect as useEffect8, useMemo as useMemo11 } from "react";
 
 // src/components/Filters/FilterGroupContext.ts
@@ -5707,7 +5707,9 @@ function CheckboxOption(props) {
   const cssClasses = useComposedCssClasses(builtInCssClasses18, props.customCssClasses);
   const optionId = useId("facet");
   const { selectFilter, filters, applyFilters } = useFiltersContext();
+  const searchActions = useSearchActions12();
   const handleClick = useCallback17((checked) => {
+    searchActions.resetFacets();
     selectFilter({
       matcher,
       fieldId,
