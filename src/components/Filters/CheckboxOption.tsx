@@ -44,7 +44,6 @@ export interface CheckboxOptionProps extends FilterOptionConfig {
  */
 export interface CheckboxCssClasses {
   input?: string,
-  inputRadio?: string,
   input___disabled?: string,
   label?: string,
   label___disabled?: string,
@@ -58,7 +57,6 @@ const builtInCssClasses: Readonly<CheckboxCssClasses> = {
   label: 'text-neutral text-sm font-normal cursor-pointer',
   label___disabled: 'opacity-50 cursor-not-allowed',
   input: 'w-3.5 h-3.5 form-checkbox cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary',
-  inputRadio: 'w-3.5 h-3.5 form-radio cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary',
   input___disabled: 'border-gray-200 bg-gray-50 cursor-not-allowed',
   container: 'flex items-center',
   optionContainer: 'flex items-center space-x-3 peer',
@@ -89,18 +87,10 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
   const { selectFilter, filters, applyFilters } = useFiltersContext();
   const searchActions = useSearchActions();
 
-  const handleClick = useCallback((checked: boolean) => {
-    searchActions.resetFacets();
-    /*const currentFacets = searchActions.state.filters.facets || [];
-    const updatedFacets = currentFacets.map(facet => ({
-      ...facet,
-      options: facet.options.map(option => ({
-        ...option,
-        selected: false
-      }))
-    }));
-    searchActions.setFacets(updatedFacets);
-*/
+  const handleClick = useCallback((checked: boolean, singleSelection: boolean) => {
+    if(singleSelection) {
+      searchActions.resetFacets();
+    }
     selectFilter({
       matcher,
       fieldId,
@@ -111,8 +101,8 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
     applyFilters();
   }, [applyFilters, fieldId, displayName, selectFilter, value, matcher]);
 
-  const handleChange = useCallback(evt => {
-    handleClick(evt.target.checked);
+  const handleChange = useCallback((evt, singleSelection) => {
+    handleClick(evt.target.checked, singleSelection);
   }, [handleClick]);
 
   const optionFilter: FieldValueFilter = useMemo(() => {
@@ -146,9 +136,6 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
   const inputClasses = classNames(cssClasses.input, {
     [cssClasses.input___disabled ?? '']: isOptionsDisabled
   });
-  const inputRadioClasses = classNames(cssClasses.inputRadio, {
-    [cssClasses.input___disabled ?? '']: isOptionsDisabled
-  });
   const labelClasses = classNames(cssClasses.label, {
     [cssClasses.label___disabled ?? '']: isOptionsDisabled
   });
@@ -162,8 +149,8 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
             name={fieldId}
             id={optionId}
             checked={isSelected}
-            className={inputRadioClasses}
-            onChange={handleChange}
+            className={inputClasses}
+            onChange={(e) => handleChange(e, true)}
             disabled={isOptionsDisabled}
           />
         ) : (
@@ -172,7 +159,7 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
               id={optionId}
               checked={isSelected}
               className={inputClasses}
-              onChange={handleChange}
+              onChange={(e) => handleChange(e, false)}
               disabled={isOptionsDisabled}
             />
           )
