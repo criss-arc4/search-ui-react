@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { FieldValueFilter, Matcher, NumberRangeValue } from '@yext/search-headless-react';
+import {FieldValueFilter, Matcher, NumberRangeValue, useSearchActions} from '@yext/search-headless-react';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useFiltersContext } from './FiltersContext';
 import { useFilterGroupContext } from './FilterGroupContext';
@@ -87,8 +87,11 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
   const cssClasses = useComposedCssClasses(builtInCssClasses, props.customCssClasses);
   const optionId = useId('facet');
   const { selectFilter, filters, applyFilters } = useFiltersContext();
+  const searchActions = useSearchActions();
 
   const handleClick = useCallback((checked: boolean) => {
+    searchActions.setOffset(0);
+    searchActions.setFacets([]);
     selectFilter({
       matcher,
       fieldId,

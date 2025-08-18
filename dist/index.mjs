@@ -5666,7 +5666,7 @@ function isUniversalSearchResults(data) {
 
 // src/components/Filters/CheckboxOption.tsx
 import { useTranslation as useTranslation16 } from "react-i18next";
-import { Matcher as Matcher5 } from "@yext/search-headless-react";
+import { Matcher as Matcher5, useSearchActions as useSearchActions12 } from "@yext/search-headless-react";
 import React43, { useCallback as useCallback17, useEffect as useEffect8, useMemo as useMemo11 } from "react";
 
 // src/components/Filters/FilterGroupContext.ts
@@ -5686,6 +5686,7 @@ var builtInCssClasses18 = {
   label: "text-neutral text-sm font-normal cursor-pointer",
   label___disabled: "opacity-50 cursor-not-allowed",
   input: "w-3.5 h-3.5 form-checkbox cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary",
+  inputRadio: "w-3.5 h-3.5 form-radio cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary",
   input___disabled: "border-gray-200 bg-gray-50 cursor-not-allowed",
   container: "flex items-center",
   optionContainer: "flex items-center space-x-3 peer",
@@ -5706,7 +5707,10 @@ function CheckboxOption(props) {
   const cssClasses = useComposedCssClasses(builtInCssClasses18, props.customCssClasses);
   const optionId = useId("facet");
   const { selectFilter, filters, applyFilters } = useFiltersContext();
+  const searchActions = useSearchActions12();
   const handleClick = useCallback17((checked) => {
+    searchActions.setOffset(0);
+    searchActions.setFacets([]);
     selectFilter({
       matcher,
       fieldId,
@@ -5742,6 +5746,9 @@ function CheckboxOption(props) {
   const inputClasses = classNames10(cssClasses.input, {
     [cssClasses.input___disabled ?? ""]: isOptionsDisabled
   });
+  const inputRadioClasses = classNames10(cssClasses.inputRadio, {
+    [cssClasses.input___disabled ?? ""]: isOptionsDisabled
+  });
   const labelClasses = classNames10(cssClasses.label, {
     [cssClasses.label___disabled ?? ""]: isOptionsDisabled
   });
@@ -5752,7 +5759,7 @@ function CheckboxOption(props) {
       name: fieldId,
       id: optionId,
       checked: isSelected,
-      className: inputClasses,
+      className: inputRadioClasses,
       onChange: handleChange,
       disabled: isOptionsDisabled
     }
@@ -5797,7 +5804,7 @@ function CollapsibleSection(props) {
 
 // src/components/Filters/FacetsProvider.tsx
 import {
-  useSearchActions as useSearchActions12,
+  useSearchActions as useSearchActions13,
   useSearchState as useSearchState23
 } from "@yext/search-headless-react";
 import React46, { useMemo as useMemo12 } from "react";
@@ -5806,7 +5813,7 @@ function FacetsProvider({
   className = "w-full",
   searchOnChange = true
 }) {
-  const searchActions = useSearchActions12();
+  const searchActions = useSearchActions13();
   const facetsInState = useSearchState23((state) => state.filters.facets);
   const facets = useMemo12(() => facetsInState ?? [], [facetsInState]);
   const filters = useMemo12(() => {
@@ -5906,14 +5913,14 @@ function SearchInput(props) {
 }
 
 // src/components/Filters/StaticFiltersProvider.tsx
-import { useSearchActions as useSearchActions13, useSearchState as useSearchState24 } from "@yext/search-headless-react";
+import { useSearchActions as useSearchActions14, useSearchState as useSearchState24 } from "@yext/search-headless-react";
 import React49, { useMemo as useMemo14 } from "react";
 function StaticFiltersProvider({
   children,
   className = "w-full",
   searchOnChange = true
 }) {
-  const searchActions = useSearchActions13();
+  const searchActions = useSearchActions14();
   const displayableFilters = useSearchState24((state) => state.filters.static);
   const filtersContextInstance = useMemo14(() => {
     return {
@@ -5943,7 +5950,7 @@ function StaticFiltersProvider({
 
 // src/components/Filters/RangeInput.tsx
 import { useTranslation as useTranslation18 } from "react-i18next";
-import { Matcher as Matcher6, useSearchActions as useSearchActions14, useSearchState as useSearchState25 } from "@yext/search-headless-react";
+import { Matcher as Matcher6, useSearchActions as useSearchActions15, useSearchState as useSearchState25 } from "@yext/search-headless-react";
 import React51, { useCallback as useCallback19, useEffect as useEffect9, useMemo as useMemo15, useState as useState13 } from "react";
 import classNames12 from "classnames";
 
@@ -5985,7 +5992,7 @@ function RangeInput(props) {
     inputPrefix
   } = props;
   const cssClasses = useComposedCssClasses(builtInCssClasses20, props.customCssClasses);
-  const searchActions = useSearchActions14();
+  const searchActions = useSearchActions15();
   const [minRangeInput, setMinRangeInput] = useState13("");
   const [maxRangeInput, setMaxRangeInput] = useState13("");
   const staticFilters = useSearchState25((state) => state.filters.static);
@@ -6548,7 +6555,7 @@ function getFacetTypeFromFacet(facet, hierarchicalFieldIds = []) {
 
 // src/components/ApplyFiltersButton.tsx
 import { useTranslation as useTranslation20 } from "react-i18next";
-import { useSearchActions as useSearchActions15 } from "@yext/search-headless-react";
+import { useSearchActions as useSearchActions16 } from "@yext/search-headless-react";
 import { useCallback as useCallback20 } from "react";
 import React63 from "react";
 var builtInCssClasses21 = {
@@ -6560,7 +6567,7 @@ function ApplyFiltersButton({
 }) {
   const { t } = useTranslation20();
   const cssClasses = useComposedCssClasses(builtInCssClasses21, customCssClasses);
-  const searchActions = useSearchActions15();
+  const searchActions = useSearchActions16();
   const handleClick = useCallback20(() => {
     searchActions.setOffset(0);
     clearStaticRangeFilters(searchActions, getSelectedNumericalFacetFields(searchActions));
@@ -6793,7 +6800,7 @@ function AnalyticsProvider(props) {
 // src/components/GenerativeDirectAnswer.tsx
 import { useTranslation as useTranslation21 } from "react-i18next";
 import {
-  useSearchActions as useSearchActions16,
+  useSearchActions as useSearchActions17,
   useSearchState as useSearchState27,
   SearchTypeEnum as SearchTypeEnum4
 } from "@yext/search-headless-react";
@@ -6891,7 +6898,7 @@ function GenerativeDirectAnswer({
     }
   }, [isUniversal, universalResults, verticalResults]);
   const lastExecutedSearchResults = useRef9(void 0);
-  const searchActions = useSearchActions16();
+  const searchActions = useSearchActions17();
   const gdaResponse = useSearchState27((state) => state.generativeDirectAnswer?.response);
   const isLoading = useSearchState27((state) => state.generativeDirectAnswer?.isLoading);
   const handleClickEvent = useReportClickEvent();
