@@ -5686,7 +5686,6 @@ var builtInCssClasses18 = {
   label: "text-neutral text-sm font-normal cursor-pointer",
   label___disabled: "opacity-50 cursor-not-allowed",
   input: "w-3.5 h-3.5 form-checkbox cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary",
-  inputRadio: "w-3.5 h-3.5 form-radio cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary",
   input___disabled: "border-gray-200 bg-gray-50 cursor-not-allowed",
   container: "flex items-center",
   optionContainer: "flex items-center space-x-3 peer",
@@ -5708,8 +5707,10 @@ function CheckboxOption(props) {
   const optionId = useId("facet");
   const { selectFilter, filters, applyFilters } = useFiltersContext();
   const searchActions = useSearchActions12();
-  const handleClick = useCallback17((checked) => {
-    searchActions.resetFacets();
+  const handleClick = useCallback17((checked, singleSelection2) => {
+    if (singleSelection2) {
+      searchActions.resetFacets();
+    }
     selectFilter({
       matcher,
       fieldId,
@@ -5719,8 +5720,8 @@ function CheckboxOption(props) {
     });
     applyFilters();
   }, [applyFilters, fieldId, displayName, selectFilter, value, matcher]);
-  const handleChange = useCallback17((evt) => {
-    handleClick(evt.target.checked);
+  const handleChange = useCallback17((evt, singleSelection2) => {
+    handleClick(evt.target.checked, singleSelection2);
   }, [handleClick]);
   const optionFilter = useMemo11(() => {
     return {
@@ -5745,9 +5746,6 @@ function CheckboxOption(props) {
   const inputClasses = classNames10(cssClasses.input, {
     [cssClasses.input___disabled ?? ""]: isOptionsDisabled
   });
-  const inputRadioClasses = classNames10(cssClasses.inputRadio, {
-    [cssClasses.input___disabled ?? ""]: isOptionsDisabled
-  });
   const labelClasses = classNames10(cssClasses.label, {
     [cssClasses.label___disabled ?? ""]: isOptionsDisabled
   });
@@ -5758,8 +5756,8 @@ function CheckboxOption(props) {
       name: fieldId,
       id: optionId,
       checked: isSelected,
-      className: inputRadioClasses,
-      onChange: handleChange,
+      className: inputClasses,
+      onChange: (e) => handleChange(e, true),
       disabled: isOptionsDisabled
     }
   ) : /* @__PURE__ */ React43.createElement(
@@ -5769,7 +5767,7 @@ function CheckboxOption(props) {
       id: optionId,
       checked: isSelected,
       className: inputClasses,
-      onChange: handleChange,
+      onChange: (e) => handleChange(e, false),
       disabled: isOptionsDisabled
     }
   ), /* @__PURE__ */ React43.createElement("label", { className: labelClasses, htmlFor: optionId }, labelText)), isOptionsDisabled && /* @__PURE__ */ React43.createElement("div", { className: cssClasses.tooltipContainer }, /* @__PURE__ */ React43.createElement("div", { className: cssClasses.tooltip }, t("clearTheRangeToSelectOptions"))));

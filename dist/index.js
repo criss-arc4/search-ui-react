@@ -5735,7 +5735,6 @@ var builtInCssClasses18 = {
   label: "text-neutral text-sm font-normal cursor-pointer",
   label___disabled: "opacity-50 cursor-not-allowed",
   input: "w-3.5 h-3.5 form-checkbox cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary",
-  inputRadio: "w-3.5 h-3.5 form-radio cursor-pointer border border-gray-300 rounded-sm text-primary focus:ring-primary",
   input___disabled: "border-gray-200 bg-gray-50 cursor-not-allowed",
   container: "flex items-center",
   optionContainer: "flex items-center space-x-3 peer",
@@ -5757,8 +5756,10 @@ function CheckboxOption(props) {
   const optionId = useId("facet");
   const { selectFilter, filters, applyFilters } = useFiltersContext();
   const searchActions = (0, import_search_headless_react30.useSearchActions)();
-  const handleClick = (0, import_react67.useCallback)((checked) => {
-    searchActions.resetFacets();
+  const handleClick = (0, import_react67.useCallback)((checked, singleSelection2) => {
+    if (singleSelection2) {
+      searchActions.resetFacets();
+    }
     selectFilter({
       matcher,
       fieldId,
@@ -5768,8 +5769,8 @@ function CheckboxOption(props) {
     });
     applyFilters();
   }, [applyFilters, fieldId, displayName, selectFilter, value, matcher]);
-  const handleChange = (0, import_react67.useCallback)((evt) => {
-    handleClick(evt.target.checked);
+  const handleChange = (0, import_react67.useCallback)((evt, singleSelection2) => {
+    handleClick(evt.target.checked, singleSelection2);
   }, [handleClick]);
   const optionFilter = (0, import_react67.useMemo)(() => {
     return {
@@ -5794,9 +5795,6 @@ function CheckboxOption(props) {
   const inputClasses = (0, import_classnames10.default)(cssClasses.input, {
     [cssClasses.input___disabled ?? ""]: isOptionsDisabled
   });
-  const inputRadioClasses = (0, import_classnames10.default)(cssClasses.inputRadio, {
-    [cssClasses.input___disabled ?? ""]: isOptionsDisabled
-  });
   const labelClasses = (0, import_classnames10.default)(cssClasses.label, {
     [cssClasses.label___disabled ?? ""]: isOptionsDisabled
   });
@@ -5807,8 +5805,8 @@ function CheckboxOption(props) {
       name: fieldId,
       id: optionId,
       checked: isSelected,
-      className: inputRadioClasses,
-      onChange: handleChange,
+      className: inputClasses,
+      onChange: (e) => handleChange(e, true),
       disabled: isOptionsDisabled
     }
   ) : /* @__PURE__ */ import_react67.default.createElement(
@@ -5818,7 +5816,7 @@ function CheckboxOption(props) {
       id: optionId,
       checked: isSelected,
       className: inputClasses,
-      onChange: handleChange,
+      onChange: (e) => handleChange(e, false),
       disabled: isOptionsDisabled
     }
   ), /* @__PURE__ */ import_react67.default.createElement("label", { className: labelClasses, htmlFor: optionId }, labelText)), isOptionsDisabled && /* @__PURE__ */ import_react67.default.createElement("div", { className: cssClasses.tooltipContainer }, /* @__PURE__ */ import_react67.default.createElement("div", { className: cssClasses.tooltip }, t("clearTheRangeToSelectOptions"))));

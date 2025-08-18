@@ -101,7 +101,7 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
     applyFilters();
   }, [applyFilters, fieldId, displayName, selectFilter, value, matcher]);
 
-  const handleChange = useCallback((evt, singleSelection) => {
+  const handleChange = useCallback((evt, singleSelection: boolean) => {
     handleClick(evt.target.checked, singleSelection);
   }, [handleClick]);
 
