@@ -87,12 +87,8 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
   const cssClasses = useComposedCssClasses(builtInCssClasses, props.customCssClasses);
   const optionId = useId('facet');
   const { selectFilter, filters, applyFilters } = useFiltersContext();
-  const searchActions = useSearchActions();
 
   const handleClick = useCallback((checked: boolean) => {
-    searchActions.setOffset(0);
-    const currentFacets = searchActions.state.filters.facets || [];
-    searchActions.setFacets(currentFacets.slice(-1));
     selectFilter({
       matcher,
       fieldId,

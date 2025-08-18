@@ -5756,11 +5756,7 @@ function CheckboxOption(props) {
   const cssClasses = useComposedCssClasses(builtInCssClasses18, props.customCssClasses);
   const optionId = useId("facet");
   const { selectFilter, filters, applyFilters } = useFiltersContext();
-  const searchActions = (0, import_search_headless_react30.useSearchActions)();
   const handleClick = (0, import_react67.useCallback)((checked) => {
-    searchActions.setOffset(0);
-    const currentFacets = searchActions.state.filters.facets || [];
-    searchActions.setFacets(currentFacets.slice(-1));
     selectFilter({
       matcher,
       fieldId,
