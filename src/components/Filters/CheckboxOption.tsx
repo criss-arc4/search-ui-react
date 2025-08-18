@@ -91,7 +91,8 @@ export function CheckboxOption(props: CheckboxOptionProps): JSX.Element | null {
 
   const handleClick = useCallback((checked: boolean) => {
     searchActions.setOffset(0);
-    searchActions.setFacets([]);
+    const currentFacets = searchActions.state.filters.facets || [];
+    searchActions.setFacets(currentFacets.slice(-1));
     selectFilter({
       matcher,
       fieldId,
