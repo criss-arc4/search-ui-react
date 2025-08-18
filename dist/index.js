@@ -5759,7 +5759,8 @@ function CheckboxOption(props) {
   const searchActions = (0, import_search_headless_react30.useSearchActions)();
   const handleClick = (0, import_react67.useCallback)((checked) => {
     searchActions.setOffset(0);
-    searchActions.setFacets([]);
+    const currentFacets = searchActions.state.filters.facets || [];
+    searchActions.setFacets(currentFacets.slice(-1));
     selectFilter({
       matcher,
       fieldId,

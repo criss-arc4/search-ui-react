@@ -5710,7 +5710,8 @@ function CheckboxOption(props) {
   const searchActions = useSearchActions12();
   const handleClick = useCallback17((checked) => {
     searchActions.setOffset(0);
-    searchActions.setFacets([]);
+    const currentFacets = searchActions.state.filters.facets || [];
+    searchActions.setFacets(currentFacets.slice(-1));
     selectFilter({
       matcher,
       fieldId,
